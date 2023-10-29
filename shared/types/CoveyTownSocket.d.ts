@@ -1,3 +1,25 @@
+export type GomokuGridPosition = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14;
+
+/**
+ * Type for a move in Gmooku
+ */
+export interface GomokuMove {
+  gamePiece: 'Black' | 'White';
+  row: number;
+  col: number;
+}
+
+/**
+ * Type for the state of a Gomoku game
+ * The state of the game is represented as a list of moves, and the playerIDs of the players (black and white)
+ * The first player to join the game is black, the second is white
+ */
+export interface GomokuGameState extends WinnableGameState {
+  moves: ReadonlyArray<GomokuMove>;
+  black?: PlayerID;
+  white?: PlayerID;
+}
+
 export type TownJoinResponse = {
   /** Unique ID that represents this player * */
   userID: string;
@@ -15,9 +37,9 @@ export type TownJoinResponse = {
   isPubliclyListed: boolean;
   /** Current state of interactables in this town */
   interactables: TypedInteractable[];
-}
+};
 
-export type InteractableType = 'ConversationArea' | 'ViewingArea' | 'TicTacToeArea';
+export type InteractableType = 'ConversationArea' | 'ViewingArea' | 'TicTacToeArea' | 'GomokuArea';
 export interface Interactable {
   type: InteractableType;
   id: InteractableID;
@@ -27,7 +49,7 @@ export interface Interactable {
 export type TownSettingsUpdate = {
   friendlyName?: string;
   isPubliclyListed?: boolean;
-}
+};
 
 export type Direction = 'front' | 'back' | 'left' | 'right';
 
@@ -36,9 +58,9 @@ export interface Player {
   id: PlayerID;
   userName: string;
   location: PlayerLocation;
-};
+}
 
-export type XY = { x: number, y: number };
+export type XY = { x: number; y: number };
 
 export interface PlayerLocation {
   /* The CENTER x coordinate of this player's location */
@@ -49,7 +71,7 @@ export interface PlayerLocation {
   rotation: Direction;
   moving: boolean;
   interactableID?: string;
-};
+}
 export type ChatMessage = {
   author: string;
   sid: string;
@@ -59,13 +81,13 @@ export type ChatMessage = {
 
 export interface ConversationArea extends Interactable {
   topic?: string;
-};
+}
 export interface BoundingBox {
   x: number;
   y: number;
   width: number;
   height: number;
-};
+}
 
 export interface ViewingArea extends Interactable {
   video?: string;
@@ -79,7 +101,7 @@ export type GameStatus = 'IN_PROGRESS' | 'WAITING_TO_START' | 'OVER';
  */
 export interface GameState {
   status: GameStatus;
-} 
+}
 
 /**
  * Type for the state of a game that can be won
@@ -174,8 +196,13 @@ interface InteractableCommandBase {
   type: string;
 }
 
-export type InteractableCommand =  ViewingAreaUpdateCommand | JoinGameCommand | GameMoveCommand<TicTacToeMove> | LeaveGameCommand;
-export interface ViewingAreaUpdateCommand  {
+export type InteractableCommand =
+  | ViewingAreaUpdateCommand
+  | JoinGameCommand
+  | GameMoveCommand<MoveType>
+  | LeaveGameCommand;
+
+export interface ViewingAreaUpdateCommand {
   type: 'ViewingAreaUpdate';
   update: ViewingArea;
 }
@@ -191,19 +218,23 @@ export interface GameMoveCommand<MoveType> {
   gameID: GameInstanceID;
   move: MoveType;
 }
-export type InteractableCommandReturnType<CommandType extends InteractableCommand> = 
-  CommandType extends JoinGameCommand ? { gameID: string}:
-  CommandType extends ViewingAreaUpdateCommand ? undefined :
-  CommandType extends GameMoveCommand<TicTacToeMove> ? undefined :
-  CommandType extends LeaveGameCommand ? undefined :
-  never;
+export type InteractableCommandReturnType<CommandType extends InteractableCommand> =
+  CommandType extends JoinGameCommand
+    ? { gameID: string }
+    : CommandType extends ViewingAreaUpdateCommand
+    ? undefined
+    : CommandType extends GameMoveCommand<TicTacToeMove>
+    ? undefined
+    : CommandType extends LeaveGameCommand
+    ? undefined
+    : never;
 
 export type InteractableCommandResponse<MessageType> = {
   commandID: CommandID;
   interactableID: InteractableID;
   error?: string;
   payload?: InteractableCommandResponseMap[MessageType];
-}
+};
 
 export interface ServerToClientEvents {
   playerMoved: (movedPlayer: Player) => void;
