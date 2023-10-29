@@ -68,8 +68,7 @@ export default function GomokuBoard({ gameAreaController }: GomokuGameProps): JS
                 }
               }}
               disabled={!isOurTurn}
-              aria-label={`Cell ${rowIndex},${colIndex}`}
-            >
+              aria-label={`Cell ${rowIndex},${colIndex}`}>
               {cell}
             </StyledGomokuSquare>
           );
