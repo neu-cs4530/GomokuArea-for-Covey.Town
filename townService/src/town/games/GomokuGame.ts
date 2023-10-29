@@ -11,7 +11,7 @@ import { GameMove, GomokuGameState, GomokuMove } from '../../types/CoveyTownSock
 import Game from './Game';
 
 /**
- * A TicTacToeGame is a Game that implements the rules of Tic Tac Toe.
+ * A GomokuGame, aka Five in a Row, is an abstract strategy board game.
  * @see https://en.wikipedia.org/wiki/Gomoku
  */
 export default class GomokuGame extends Game<GomokuGameState, GomokuMove> {
