@@ -609,6 +609,23 @@
                  "width":1.33529176124966,
                  "x":3296.83535852584,
                  "y":1068.23340899987
+                }, 
+                {
+                 "height":47.4806636363636,
+                 "id":52,
+                 "name":"Gomoku",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"Gomoku"
+                        }],
+                 "rotation":0,
+                 "type":"GameArea",
+                 "visible":true,
+                 "width":77.3316060606062,
+                 "x":3163.45540909091,
+                 "y":838.683910606061
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -617,7 +634,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":52,
+ "nextobjectid":53,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",

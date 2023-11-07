@@ -1,9 +1,11 @@
+import exp from 'constants';
 import {
   ConversationArea,
   Interactable,
   TicTacToeGameState,
   ViewingArea,
   GameArea,
+  GomokuGameState,
 } from './CoveyTownSocket';
 
 /**
@@ -24,4 +26,10 @@ export function isTicTacToeArea(
   interactable: Interactable,
 ): interactable is GameArea<TicTacToeGameState> {
   return interactable.type === 'TicTacToeArea';
+}
+
+export function isGomokuArea(
+  interactable: Interactable,
+): interactable is GameArea<GomokuGameState> {
+  return interactable.type === 'GomokuArea';
 }
