@@ -24,7 +24,6 @@ const StyledGomokuSquare = chakra(Button, {
   },
 });
 
-
 const StyledGomokuBoard = chakra(Container, {
   baseStyle: {
     display: 'flex',
