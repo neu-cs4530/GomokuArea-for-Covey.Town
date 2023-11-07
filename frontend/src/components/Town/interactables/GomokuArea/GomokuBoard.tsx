@@ -13,22 +13,24 @@ const StyledGomokuSquare = chakra(Button, {
   baseStyle: {
     justifyContent: 'center',
     alignItems: 'center',
-    flexBasis: '6.66%',
+    width: '10',
+    height: '20',
+    fontSize: '10px',
     border: '1px solid black',
-    height: '6.66%',
-    fontSize: '20px',
+    boxSizing: 'border-box',
     _disabled: {
       opacity: '100%',
     },
   },
 });
 
+
 const StyledGomokuBoard = chakra(Container, {
   baseStyle: {
     display: 'flex',
-    width: '400px',
-    height: '400px',
-    padding: '5px',
+    width: '1500px',
+    height: '1500px',
+    padding: '2px',
     flexWrap: 'wrap',
   },
 });
