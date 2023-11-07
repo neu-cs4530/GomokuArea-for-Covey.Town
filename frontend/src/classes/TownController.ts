@@ -26,7 +26,12 @@ import {
   TownSettingsUpdate,
   ViewingArea as ViewingAreaModel,
 } from '../types/CoveyTownSocket';
-import { isConversationArea, isGomokuArea, isTicTacToeArea, isViewingArea } from '../types/TypeUtils';
+import {
+  isConversationArea,
+  isGomokuArea,
+  isTicTacToeArea,
+  isViewingArea,
+} from '../types/TypeUtils';
 import ConversationAreaController from './interactable/ConversationAreaController';
 import GameAreaController, { GameEventTypes } from './interactable/GameAreaController';
 import InteractableAreaController, {

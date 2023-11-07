@@ -72,7 +72,7 @@ function GomokuArea({ interactableID }: { interactableID: InteractableID }): JSX
       gameAreaController.removeListener('gameUpdated', updateGameState);
       gameAreaController.removeListener('gameEnd', onGameEnd);
     };
-  }, [townController, gameAreaController, toast]);
+  }, [townController, gameAreaController, toast, updateGameState]);
 
   let gameStatusText = <></>;
   if (gameStatus === 'IN_PROGRESS') {
@@ -106,8 +106,7 @@ function GomokuArea({ interactableID }: { interactableID: InteractableID }): JSX
             setJoiningGame(false);
           }}
           isLoading={joiningGame}
-          disabled={joiningGame}
-        >
+          disabled={joiningGame}>
           Join New Game
         </Button>
       );
