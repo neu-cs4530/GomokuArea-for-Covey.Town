@@ -478,117 +478,153 @@ describe('GomokuGame', () => {
                 makeMoveAndCheckState(12, 10, 'White', 'WIN');
               });
             });
-            // describe('if there are no winning conditions but the board is filled', () => {
-            //   it('Declear a tie', () => {
-            //     for (let row = 0; row < 13; row += 2) {
-            //       for (let col = 0; col < 11; col += 4) {
-            //         game.applyMove({
-            //           gameID: game.id,
-            //           playerID: player1.id,
-            //           move: {
-            //             row,
-            //             col,
-            //             gamePiece: 'Black',
-            //           },
-            //         });
-            //         game.applyMove({
-            //           gameID: game.id,
-            //           playerID: player2.id,
-            //           move: {
-            //             row,
-            //             col: col + 2,
-            //             gamePiece: 'White',
-            //           },
-            //         });
-            //         game.applyMove({
-            //           gameID: game.id,
-            //           playerID: player1.id,
-            //           move: {
-            //             row,
-            //             col: col + 1,
-            //             gamePiece: 'Black',
-            //           },
-            //         });
-            //         game.applyMove({
-            //           gameID: game.id,
-            //           playerID: player2.id,
-            //           move: {
-            //             row,
-            //             col: col + 3,
-            //             gamePiece: 'White',
-            //           },
-            //         });
-            //       }
-            //     }
+            describe('if there are no winning conditions but the board is filled', () => {
+              it('Declear a tie', () => {
+                for (let row = 0; row < 15; row += 2) {
+                  for (let col = 0; col < 11; col += 4) {
+                    game.applyMove({
+                      gameID: game.id,
+                      playerID: player1.id,
+                      move: {
+                        row,
+                        col,
+                        gamePiece: 'Black',
+                      },
+                    });
+                    game.applyMove({
+                      gameID: game.id,
+                      playerID: player2.id,
+                      move: {
+                        row,
+                        col: col + 2,
+                        gamePiece: 'White',
+                      },
+                    });
+                    game.applyMove({
+                      gameID: game.id,
+                      playerID: player1.id,
+                      move: {
+                        row,
+                        col: col + 1,
+                        gamePiece: 'Black',
+                      },
+                    });
+                    game.applyMove({
+                      gameID: game.id,
+                      playerID: player2.id,
+                      move: {
+                        row,
+                        col: col + 3,
+                        gamePiece: 'White',
+                      },
+                    });
+                  }
+                }
 
-            //     for (let row = 1; row < 14; row += 2) {
-            //       for (let col = 0; col < 11; col += 4) {
-            //         game.applyMove({
-            //           gameID: game.id,
-            //           playerID: player1.id,
-            //           move: {
-            //             row,
-            //             col: col + 2,
-            //             gamePiece: 'Black',
-            //           },
-            //         });
-            //         game.applyMove({
-            //           gameID: game.id,
-            //           playerID: player2.id,
-            //           move: {
-            //             row,
-            //             col,
-            //             gamePiece: 'White',
-            //           },
-            //         });
-            //         game.applyMove({
-            //           gameID: game.id,
-            //           playerID: player1.id,
-            //           move: {
-            //             row,
-            //             col: col + 3,
-            //             gamePiece: 'Black',
-            //           },
-            //         });
-            //         game.applyMove({
-            //           gameID: game.id,
-            //           playerID: player2.id,
-            //           move: {
-            //             row,
-            //             col: col + 1,
-            //             gamePiece: 'White',
-            //           },
-            //         });
-            //       }
-            //     }
-            //     for (let row = 0; row < 15; row++) {
-            //       if (row % 2 === 0) {
-            //         game.applyMove({
-            //           gameID: game.id,
-            //           playerID: player1.id,
-            //           move: {
-            //             row,
-            //             col: 14,
-            //             gamePiece: 'Black',
-            //           },
-            //         });
-            //       } else {
-            //         game.applyMove({
-            //           gameID: game.id,
-            //           playerID: player2.id,
-            //           move: {
-            //             row,
-            //             col: 14,
-            //             gamePiece: 'White',
-            //           },
-            //         });
-            //       }
-            //     }
+                for (let row = 1; row < 15; row += 2) {
+                  for (let col = 0; col < 11; col += 4) {
+                    game.applyMove({
+                      gameID: game.id,
+                      playerID: player1.id,
+                      move: {
+                        row,
+                        col: col + 2,
+                        gamePiece: 'Black',
+                      },
+                    });
+                    game.applyMove({
+                      gameID: game.id,
+                      playerID: player2.id,
+                      move: {
+                        row,
+                        col,
+                        gamePiece: 'White',
+                      },
+                    });
+                    game.applyMove({
+                      gameID: game.id,
+                      playerID: player1.id,
+                      move: {
+                        row,
+                        col: col + 3,
+                        gamePiece: 'Black',
+                      },
+                    });
+                    game.applyMove({
+                      gameID: game.id,
+                      playerID: player2.id,
+                      move: {
+                        row,
+                        col: col + 1,
+                        gamePiece: 'White',
+                      },
+                    });
+                  }
+                }
+                for (let row = 0; row < 15; row++) {
+                  if (row % 2 === 0) {
+                    game.applyMove({
+                      gameID: game.id,
+                      playerID: player1.id,
+                      move: {
+                        row,
+                        col: 12,
+                        gamePiece: 'Black',
+                      },
+                    });
+                    game.applyMove({
+                      gameID: game.id,
+                      playerID: player2.id,
+                      move: {
+                        row,
+                        col: 13,
+                        gamePiece: 'White',
+                      },
+                    });
+                    game.applyMove({
+                      gameID: game.id,
+                      playerID: player1.id,
+                      move: {
+                        row,
+                        col: 14,
+                        gamePiece: 'Black',
+                      },
+                    });
+                  } else {
+                    game.applyMove({
+                      gameID: game.id,
+                      playerID: player2.id,
+                      move: {
+                        row,
+                        col: 12,
+                        gamePiece: 'White',
+                      },
+                    });
+                    game.applyMove({
+                      gameID: game.id,
+                      playerID: player1.id,
+                      move: {
+                        row,
+                        col: 13,
+                        gamePiece: 'Black',
+                      },
+                    });
+                    game.applyMove({
+                      gameID: game.id,
+                      playerID: player2.id,
+                      move: {
+                        row,
+                        col: 14,
+                        gamePiece: 'White',
+                      },
+                    });
+                  }
+                }
 
-            //     expect(game.state.status).toEqual('OVER');
-            //     expect(game.state.winner).toBeUndefined();
-            //   });
-            // });
+                expect(game.state.status).toEqual('OVER');
+                expect(game.state.winner).toBeUndefined();
+              });
+            });
           });
         });
       });
