@@ -11,14 +11,16 @@ export type GomokuGameProps = {
 
 const StyledGomokuSquare = chakra(Button, {
   baseStyle: {
+    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    width: '10',
-    height: '20',
+    width: '40px',
+    height: '40px',
     fontSize: '10px',
     border: '1px solid black',
     boxSizing: 'border-box',
     _disabled: {
+      cursor: 'not-allowed',
       opacity: '100%',
     },
   },
@@ -27,10 +29,13 @@ const StyledGomokuSquare = chakra(Button, {
 const StyledGomokuBoard = chakra(Container, {
   baseStyle: {
     display: 'flex',
-    width: '1500px',
-    height: '1500px',
-    padding: '2px',
     flexWrap: 'wrap',
+    width: '620px',
+    height: '620px',
+    gap: '0px',
+    padding: '1px',
+    bg: 'white',
+    border: '1px solid black',
   },
 });
 
