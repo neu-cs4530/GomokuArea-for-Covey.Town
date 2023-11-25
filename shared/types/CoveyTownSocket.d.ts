@@ -79,6 +79,10 @@ export type ChatMessage = {
   dateCreated: Date;
 };
 
+export type ChatRoomMessage = ChatMessage & {
+  roomID: string;
+};
+
 export interface ConversationArea extends Interactable {
   topic?: string;
 }
@@ -244,12 +248,14 @@ export interface ServerToClientEvents {
   townSettingsUpdated: (update: TownSettingsUpdate) => void;
   townClosing: () => void;
   chatMessage: (message: ChatMessage) => void;
+  ChatRoomMessage: (message: ChatRoomMessage) => void;
   interactableUpdate: (interactable: Interactable) => void;
   commandResponse: (response: InteractableCommandResponse) => void;
 }
 
 export interface ClientToServerEvents {
   chatMessage: (message: ChatMessage) => void;
+  ChatRoomMessage: (message: ChatRoomMessage) => void;
   playerMovement: (movementData: PlayerLocation) => void;
   interactableUpdate: (update: Interactable) => void;
   interactableCommand: (command: InteractableCommand & InteractableCommandBase) => void;

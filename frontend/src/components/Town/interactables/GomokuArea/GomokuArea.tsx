@@ -20,10 +20,22 @@ import { GameStatus, InteractableID } from '../../../../types/CoveyTownSocket';
 import GameAreaInteractable from '../GameArea';
 import GomokuBoard from './GomokuBoard';
 
+// chat room imports
+import ChatRoom from '../../../ChatRoom/ChatRoom';
+import TextConversation from '../../../../classes/TextConversation';
+import { ChatMessage } from '../../../../types/CoveyTownSocket';
+
 function GomokuArea({ interactableID }: { interactableID: InteractableID }): JSX.Element {
   const gameAreaController = useInteractableAreaController<GomokuAreaController>(interactableID);
   const townController = useTownController();
   const toast = useToast();
+
+  // State for controlling the visibility of the chat room
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const toggleChat = () => setIsChatOpen(!isChatOpen);
+
+  // Create a TextConversation instance or retrieve from state/context
+  const conversation = new TextConversation(townController);
 
   const [gameStatus, setGameStatus] = useState<GameStatus>(gameAreaController.status);
   const [joiningGame, setJoiningGame] = useState(false);
@@ -119,15 +131,25 @@ function GomokuArea({ interactableID }: { interactableID: InteractableID }): JSX
   }
 
   return (
-    <Container>
-      <Heading as='h3'>Gomoku Game</Heading>
-      <List aria-label='list of players in the game'>
-        <ListItem>Black: {blackPlayer?.userName || '(No player yet!)'}</ListItem>
-        <ListItem>White: {whitePlayer?.userName || '(No player yet!)'}</ListItem>
-      </List>
-      {gameStatusText}
-      <GomokuBoard gameAreaController={gameAreaController} />
-    </Container>
+    <Box display="flex" justifyContent="space-between">
+      <Container>
+        <Heading as='h3'>Gomoku Game</Heading>
+        <List aria-label='list of players in the game'>
+          <ListItem>Black: {blackPlayer?.userName || '(No player yet!)'}</ListItem>
+          <ListItem>White: {whitePlayer?.userName || '(No player yet!)'}</ListItem>
+        </List>
+        {gameStatusText}
+        <GomokuBoard gameAreaController={gameAreaController} />
+      </Container>
+      <Button onClick={toggleChat} size="sm" m="4">
+        {isChatOpen ? 'Close Chat' : 'Open Chat'}
+      </Button>
+      {isChatOpen && (
+        <Box width="350px" height="100vh" overflow="auto">
+          <ChatRoom conversation={conversation} />
+        </Box>
+      )}
+    </Box>
   );
 }
 

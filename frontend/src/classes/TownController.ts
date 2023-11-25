@@ -14,6 +14,7 @@ import { TownsService, TownsServiceClient } from '../generated/client';
 import useTownController from '../hooks/useTownController';
 import {
   ChatMessage,
+  ChatRoomMessage,
   CoveyTownSocket,
   GameState,
   Interactable as InteractableAreaModel,
@@ -91,6 +92,8 @@ export type TownEvents = {
    * An event that indicates that a new chat message has been received, which is the parameter passed to the listener
    */
   chatMessage: (message: ChatMessage) => void;
+
+  ChatRoomMessage: (message: ChatRoomMessage) => void;
   /**
    * An event that indicates that the 2D game is now paused. Pausing the game should, if nothing else,
    * release all key listeners, so that text entry is possible
@@ -361,6 +364,9 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
      */
     this._socket.on('chatMessage', message => {
       this.emit('chatMessage', message);
+    });
+    this._socket.on('ChatRoomMessage', ChatRoomMessage => {
+      this.emit('ChatRoomMessage', ChatRoomMessage);
     });
     /**
      * On changes to town settings, update the local state and emit a townSettingsUpdated event to
