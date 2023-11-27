@@ -2,7 +2,7 @@ import {
   Box,
   Button,
   Container,
-  Heading,
+  Flex,
   List,
   ListItem,
   Modal,
@@ -123,32 +123,44 @@ function GomokuArea({ interactableID }: { interactableID: InteractableID }): JSX
       );
     }
     gameStatusText = (
-      <Box>
-        Game {gameStatus === 'WAITING_TO_START' ? 'not yet started' : 'over'}. {joinGameButton}
-      </Box>
+      <Flex alignItems='center' justifyContent='space-between'>
+        <Box flexGrow={1}>
+          Game {gameStatus === 'WAITING_TO_START' ? 'not yet started' : 'over'}.
+        </Box>
+        {joinGameButton}
+        <Button onClick={toggleChat} size='sm' ml='4' bg='blue.500' color='white'>
+          {isChatOpen ? 'Close Chat' : 'Open Chat'}
+        </Button>
+      </Flex>
     );
   }
 
   return (
-    <Box display="flex" justifyContent="space-between">
-      <Container>
-        <Heading as='h3'>Gomoku Game</Heading>
-        <List aria-label='list of players in the game'>
-          <ListItem>Black: {blackPlayer?.userName || '(No player yet!)'}</ListItem>
-          <ListItem>White: {whitePlayer?.userName || '(No player yet!)'}</ListItem>
-        </List>
-        {gameStatusText}
-        <GomokuBoard gameAreaController={gameAreaController} />
-      </Container>
-      <Button onClick={toggleChat} size="sm" m="4">
-        {isChatOpen ? 'Close Chat' : 'Open Chat'}
-      </Button>
-      {isChatOpen && (
-        <Box width="350px" height="100vh" overflow="auto">
-          <ChatRoom conversation={conversation} />
+    <Container maxW='container.xl'>
+      <Flex direction={{ base: 'column', md: 'row' }} mt='4' align='flex-start' h='100%'>
+        <Box flex='1' minW='0'>
+          <List aria-label='list of players in the game'>
+            <ListItem>Black: {blackPlayer?.userName || '(No player yet!)'}</ListItem>
+            <ListItem>White: {whitePlayer?.userName || '(No player yet!)'}</ListItem>
+          </List>
+          {gameStatusText}
+          <Box mt='4'>
+            <GomokuBoard gameAreaController={gameAreaController} />
+          </Box>
         </Box>
-      )}
-    </Box>
+
+        {isChatOpen && (
+          <Box
+            position='relative'
+            flex='0.5'
+            ml={{ md: '4' }}
+            h='100%'
+            w={{ base: 'full', md: '350px' }}>
+            <ChatRoom conversation={conversation} />
+          </Box>
+        )}
+      </Flex>
+    </Container>
   );
 }
 
@@ -167,7 +179,7 @@ export default function GomokuAreaWrapper(): JSX.Element {
     return (
       <Modal isOpen={true} onClose={closeModal} closeOnOverlayClick={false}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent minW='60vw' minH='80vh'>
           <ModalHeader>{gameArea.name}</ModalHeader>
           <ModalCloseButton />
           <GomokuArea interactableID={gameArea.name} />

@@ -365,9 +365,6 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
     this._socket.on('chatMessage', message => {
       this.emit('chatMessage', message);
     });
-    this._socket.on('ChatRoomMessage', ChatRoomMessage => {
-      this.emit('ChatRoomMessage', ChatRoomMessage);
-    });
     /**
      * On changes to town settings, update the local state and emit a townSettingsUpdated event to
      * the controller's event listeners

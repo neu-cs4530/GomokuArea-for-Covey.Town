@@ -1,21 +1,40 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { makeStyles } from '@material-ui/core';
 import TextConversation from '../../classes/TextConversation';
-import useTownController from '../../hooks/useTownController';
 import ChatInput from './ChatInput';
 import { ChatMessage } from '../../types/CoveyTownSocket'; // Assuming this is where ChatMessage type is defined
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   chatRoomContainer: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    width: 300,
+    position: 'relative',
+    display: 'flex',
+    width: '100%', // Adjusted to take 100% of the parent width
+    height: '100%', // Adjusted to take the full height of the viewport
+    flexDirection: 'column',
     background: 'white',
-    border: '1px solid #ddd',
+    borderRadius: '0.375rem',
+    boxShadow: '0 0 2rem 0 rgba(136, 152, 170, 0.15)',
     zIndex: 100,
-  }
-}))
+    border: 'none',
+  },
+  chatHeader: {
+    position: 'relative',
+    background: 'linear-gradient(to right, #E2E8F0, #EDF2F7)',
+    padding: '0.5rem 1rem',
+    boxShadow: 'inset 0 -1px 0 #E2E8F0',
+  },
+  messageList: {
+    overflowY: 'auto',
+    flex: 1,
+    padding: '1rem',
+    border: '1px solid #E2E8F0',
+  },
+  chatFooter: {
+    position: 'relative',
+    padding: '1rem',
+    borderTop: '1px solid #E2E8F0',
+  },
+}));
 
 interface ChatRoomProps {
   conversation: TextConversation;
@@ -26,8 +45,7 @@ const ChatRoom = ({ conversation }: ChatRoomProps) => {
 
   // Now messages is explicitly an array of ChatMessage objects
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [participants, setParticipants] = useState<Set<string>>(new Set());
-  const coveyTownController = useTownController();
+  const [, setParticipants] = useState<Set<string>>(new Set());
 
   // Fetch messages from the server and update the state
   const receiveMessage = useCallback((newMessage: ChatMessage) => {
@@ -44,24 +62,21 @@ const ChatRoom = ({ conversation }: ChatRoomProps) => {
   useEffect(() => {
     conversation.onMessageAdded(receiveMessage);
     return () => {
-      conversation.offMessageAdded(receiveMessage); // Unsubscribe on component unmount
+      conversation.offMessageAdded(receiveMessage);
     };
   }, [conversation, receiveMessage]);
 
   return (
     <div className={classes.chatRoomContainer}>
-      <div className="chat-header">
-        Chat Room
-        <button onClick={() => coveyTownController.unPause()}>Back to Game</button>
-      </div>
-      <div className="message-list">
+      <div className={classes.chatHeader}>Chat Room</div>
+      <div className={classes.messageList}>
         {messages.map((message, index) => (
-          <div key={index} className="message">
+          <div key={index} className='message'>
             <strong>{message.author}</strong>: {message.body}
           </div>
         ))}
       </div>
-      <div className="chat-footer">
+      <div className={classes.chatFooter}>
         <ChatInput conversation={conversation} isChatWindowOpen={true} />
       </div>
     </div>

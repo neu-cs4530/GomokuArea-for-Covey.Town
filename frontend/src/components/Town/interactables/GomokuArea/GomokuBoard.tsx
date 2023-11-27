@@ -13,8 +13,8 @@ const StyledGomokuSquare = chakra(Button, {
   baseStyle: {
     justifyContent: 'center',
     alignItems: 'center',
-    width: '10',
-    height: '20',
+    width: 'calc(100% / 15)',
+    height: 'calc(100% / 15)',
     fontSize: '10px',
     border: '1px solid black',
     boxSizing: 'border-box',
