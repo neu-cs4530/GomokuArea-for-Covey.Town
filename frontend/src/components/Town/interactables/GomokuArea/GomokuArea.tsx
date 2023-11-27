@@ -23,7 +23,6 @@ import GomokuBoard from './GomokuBoard';
 // chat room imports
 import ChatRoom from '../../../ChatRoom/ChatRoom';
 import TextConversation from '../../../../classes/TextConversation';
-import { ChatMessage } from '../../../../types/CoveyTownSocket';
 
 function GomokuArea({ interactableID }: { interactableID: InteractableID }): JSX.Element {
   const gameAreaController = useInteractableAreaController<GomokuAreaController>(interactableID);
