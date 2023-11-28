@@ -131,9 +131,9 @@ function GomokuArea({ interactableID }: { interactableID: InteractableID }): JSX
           Game {gameStatus === 'WAITING_TO_START' ? 'not yet started' : 'over'}.
         </Box>
         {joinGameButton}
-        <Button onClick={toggleChat} size='sm' ml='4' bg='blue.500' color='white'>
+        {/* <Button onClick={toggleChat} size='sm' ml='4' bg='blue.500' color='white'>
           {isChatOpen ? 'Close Chat' : 'Open Chat'}
-        </Button>
+        </Button> */}
       </Flex>
     );
   }
@@ -147,6 +147,9 @@ function GomokuArea({ interactableID }: { interactableID: InteractableID }): JSX
             <ListItem>White: {whitePlayer?.userName || '(No player yet!)'}</ListItem>
           </List>
           {gameStatusText}
+          <Button onClick={toggleChat} size='sm' ml='4' bg='blue.500' color='white'>
+          {isChatOpen ? 'Close Chat' : 'Open Chat'}
+        </Button>
           <Box mt='4'>
             <GomokuBoard gameAreaController={gameAreaController} />
           </Box>
