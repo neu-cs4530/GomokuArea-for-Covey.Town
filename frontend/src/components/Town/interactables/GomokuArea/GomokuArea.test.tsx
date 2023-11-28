@@ -14,14 +14,11 @@ import GomokuAreaWrapper from './GomokuArea';
 import * as GomokuBoard from './GomokuBoard';
 import {
   GameArea,
-  GameResult,
   GameStatus,
   GomokuGameState,
   PlayerLocation,
 } from '../../../../types/CoveyTownSocket';
 import PhaserGameArea from '../GameArea';
-import ChatRoom from '../../../ChatRoom/ChatRoom';
-import TextConversation from '../../../../classes/TextConversation';
 
 const mockToast = jest.fn();
 jest.mock('@chakra-ui/react', () => {
@@ -57,10 +54,6 @@ class MockGomokuAreaController extends GomokuAreaController {
 
   mockBoard: GomokuCell[][] = Array.from({ length: 15 }, () => Array(15).fill(undefined));
 
-  mockBlackPlayer: PlayerController | undefined = undefined;
-
-  mockWhitePlayer: PlayerController | undefined = undefined;
-
   mockMoveCount = 0;
 
   mockBlack: PlayerController | undefined = undefined;
@@ -86,11 +79,11 @@ class MockGomokuAreaController extends GomokuAreaController {
   }
 
   get black(): PlayerController | undefined {
-    return this.mockBlackPlayer;
+    return this.mockBlack;
   }
 
   get white(): PlayerController | undefined {
-    return this.mockWhitePlayer;
+    return this.mockWhite;
   }
 
   get moveCount(): number {
@@ -262,13 +255,7 @@ describe('[G1] GomokuArea', () => {
     });
   });
 
-  describe('[G1.2] Rendering and initial state', () => {
-    it('should render correctly with initial states', () => {
-      // Test rendering and initial states
-    });
-  });
-
-  describe('[G1.3] Join game button', () => {
+  describe('[G1.2] Join game button', () => {
     it('Is not shown when the player is in a not-yet-started game', () => {
       gameAreaController.mockStatus = 'WAITING_TO_START';
       gameAreaController.mockBlack = ourPlayer;
@@ -387,8 +374,8 @@ describe('[G1] GomokuArea', () => {
       act(() => {
         gameAreaController.mockStatus = 'IN_PROGRESS';
         gameAreaController.mockWhite = new PlayerController(
-          'player X',
-          'player X',
+          'player Black',
+          'player Black',
           randomLocation(),
         );
         gameAreaController.emit('gameUpdated');
@@ -397,10 +384,8 @@ describe('[G1] GomokuArea', () => {
     });
   });
 
-  describe('[G1.4] Players in the game text', () => {
+  describe('[G1.3] Players in the game text', () => {
     it('Displays the username of the Black player if the Black player is in the game', () => {
-      gameAreaController.mockStatus = 'IN_PROGRESS';
-      gameAreaController.mockIsPlayer = false;
       gameAreaController.mockBlack = new PlayerController(nanoid(), nanoid(), randomLocation());
       renderGomokuArea();
       const listOfPlayers = screen.getByLabelText('list of players in the game');
@@ -409,8 +394,6 @@ describe('[G1] GomokuArea', () => {
       ).toBeInTheDocument();
     });
     it('Displays the username of the White player if the White player is in the game', () => {
-      gameAreaController.mockStatus = 'IN_PROGRESS';
-      gameAreaController.mockIsPlayer = false;
       gameAreaController.mockWhite = new PlayerController(nanoid(), nanoid(), randomLocation());
       renderGomokuArea();
       const listOfPlayers = screen.getByLabelText('list of players in the game');
@@ -419,16 +402,12 @@ describe('[G1] GomokuArea', () => {
       ).toBeInTheDocument();
     });
     it('Displays "Black: (No player yet!)" if the Black player is not in the game', () => {
-      gameAreaController.mockStatus = 'IN_PROGRESS';
-      gameAreaController.mockIsPlayer = false;
       gameAreaController.mockBlack = undefined;
       renderGomokuArea();
       const listOfPlayers = screen.getByLabelText('list of players in the game');
       expect(within(listOfPlayers).getByText(`Black: (No player yet!)`)).toBeInTheDocument();
     });
     it('Displays "White: (No player yet!)" if the White player is not in the game', () => {
-      gameAreaController.mockStatus = 'IN_PROGRESS';
-      gameAreaController.mockIsPlayer = false;
       gameAreaController.mockWhite = undefined;
       renderGomokuArea();
       const listOfPlayers = screen.getByLabelText('list of players in the game');
@@ -464,7 +443,7 @@ describe('[G1] GomokuArea', () => {
     });
   });
 
-  describe('[G1.5] Game status text', () => {
+  describe('[G1.4] Game status text', () => {
     it('Displays the correct text when the game is waiting to start', () => {
       gameAreaController.mockStatus = 'WAITING_TO_START';
       renderGomokuArea();
@@ -609,12 +588,58 @@ describe('[G1] GomokuArea', () => {
   });
 
   describe('[G1.6] Chat room functionality', () => {
-    it('should toggle chat room on button click', () => {
-      // Test chat room toggle functionality
-    });
+    describe('Chat Room Button', () => {
+      it('is presented at beginning', () => {
+        renderGomokuArea();
+        expect(screen.queryByText('Open Chat')).toBeInTheDocument();
+      });
+      describe('When not clicked', () => {
+        it('should not displays Chat Room Area', () => {
+          renderGomokuArea();
+          expect(screen.queryByText('Chat Room')).not.toBeInTheDocument();
+          expect(screen.queryByPlaceholderText('Write a message...')).not.toBeInTheDocument();
+          expect(screen.queryByText('Send')).not.toBeInTheDocument();
+        });
 
-    it('should display the correct content in the chat room', () => {
-      // Test chat room content
+        it('shoudl not show Close Chat Button', () => {
+          renderGomokuArea();
+          expect(screen.queryByText('Close Chat')).not.toBeInTheDocument();
+        });
+      });
+      describe('When clicked', () => {
+        it('Displays Chat Room Area', () => {
+          renderGomokuArea();
+          const button = screen.getByText('Open Chat');
+          fireEvent.click(button);
+          expect(screen.queryByText('Chat Room')).toBeInTheDocument();
+          expect(screen.queryByPlaceholderText('Write a message...')).toBeInTheDocument();
+          expect(screen.queryByText('Send')).toBeInTheDocument();
+        });
+
+        it('Change Button to Cloase Chat', () => {
+          renderGomokuArea();
+          const button = screen.getByText('Open Chat');
+          fireEvent.click(button);
+          expect(screen.queryByText('Close Chat')).toBeInTheDocument();
+        });
+      });
+
+      it('cleans up chat history when closed and reopened', () => {
+        renderGomokuArea();
+
+        fireEvent.click(screen.getByText('Open Chat'));
+
+        fireEvent.change(screen.getByPlaceholderText('Write a message...'), {
+          target: { value: 'Test Message' },
+        });
+        fireEvent.click(screen.getByText('Send'));
+
+        fireEvent.click(screen.getByText('Close Chat'));
+
+        fireEvent.click(screen.getByText('Open Chat'));
+
+        expect(screen.queryByText('Test Message')).not.toBeInTheDocument();
+      });
     });
   });
 });
