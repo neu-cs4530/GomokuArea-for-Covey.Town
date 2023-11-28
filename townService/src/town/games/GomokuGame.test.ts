@@ -10,7 +10,7 @@ import {
 import GomokuGame from './GomokuGame';
 import Player from '../../lib/Player';
 import { GomokuMove } from '../../types/CoveyTownSocket';
-
+// GomokuGame Tests
 describe('GomokuGame', () => {
   let game: GomokuGame;
 
@@ -18,6 +18,7 @@ describe('GomokuGame', () => {
     game = new GomokuGame();
   });
 
+  // join tests
   describe('[T1.1] _join', () => {
     it('should throw an error if the player is already in the game', () => {
       const player = createPlayerForTesting();
@@ -45,6 +46,7 @@ describe('GomokuGame', () => {
 
       expect(() => game.join(player1)).toThrowError(GAME_FULL_MESSAGE);
     });
+    // Add player tests
     describe('When the player can be added', () => {
       it('makes the first player Black and initializes the state with status WAITING_TO_START', () => {
         const player = createPlayerForTesting();
@@ -98,7 +100,7 @@ describe('GomokuGame', () => {
       });
     });
   });
-
+  // leave game tests
   describe('[T1.2] _leave', () => {
     it('should throw an error if the player is not in the game', () => {
       expect(() => game.leave(createPlayerForTesting())).toThrowError(PLAYER_NOT_IN_GAME_MESSAGE);
@@ -158,6 +160,8 @@ describe('GomokuGame', () => {
         expect(game.state.winner).toBeUndefined();
       });
     });
+
+    // Move tests
     describe('applyMove', () => {
       let moves: GomokuMove[] = [];
       describe('when given an invalid move', () => {
@@ -349,6 +353,7 @@ describe('GomokuGame', () => {
         });
       });
 
+      // Test if a move is valid
       describe('when given a valid move', () => {
         let player1: Player;
         let player2: Player;
@@ -405,6 +410,7 @@ describe('GomokuGame', () => {
           // ... More moves, but less than 5 in a row for either player
         });
 
+        // End game test
         describe('[T2.3] when the move ends the game', () => {
           describe('it checks for winning conditions', () => {
             describe('a horizontal win', () => {

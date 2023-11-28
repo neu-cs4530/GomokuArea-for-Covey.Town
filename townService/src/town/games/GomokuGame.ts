@@ -51,6 +51,7 @@ export default class GomokuGame extends Game<GomokuGameState, GomokuMove> {
     }
   }
 
+  // move helper
   private _applyMove(move: GomokuMove): void {
     this.state = {
       ...this.state,

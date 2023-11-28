@@ -72,6 +72,8 @@ describe('GomokuGameArea', () => {
     // @ts-ignore (Test requires access to protected method)
     interactableUpdateSpy = jest.spyOn(gameArea, '_emitAreaChanged');
   });
+
+  // Handle Command tests
   describe('handleCommand', () => {
     describe('[T3.1] when given a JoinGame command', () => {
       describe('when there is no game in progress', () => {
