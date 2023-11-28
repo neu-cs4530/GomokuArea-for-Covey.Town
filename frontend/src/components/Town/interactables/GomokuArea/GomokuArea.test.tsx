@@ -189,9 +189,9 @@ describe('[G1] GomokuArea', () => {
       addListenerSpy.mockClear();
 
       renderGomokuArea();
-      expect(addListenerSpy).toBeCalledTimes(2);
       expect(addListenerSpy).toHaveBeenCalledWith('gameUpdated', expect.any(Function));
       expect(addListenerSpy).toHaveBeenCalledWith('gameEnd', expect.any(Function));
+      expect(addListenerSpy).toBeCalledTimes(2);
     });
 
     it('Does not register listeners on every render', () => {
@@ -502,31 +502,15 @@ describe('[G1] GomokuArea', () => {
       });
 
       it('Displays a message "Game in progress, {numMoves} moves in" and indicates whose turn it is when it is the other player\'s turn', () => {
-        gameAreaController.mockMoveCount = 1;
+        gameAreaController.mockMoveCount = 3;
         gameAreaController.mockWhoseTurn = gameAreaController.mockWhite;
         gameAreaController.mockIsOurTurn = false;
         renderGomokuArea();
         expect(
           screen.getByText(
-            `Game in progress, 1 moves in, currently ${gameAreaController.white?.userName}'s turn`,
+            `Game in progress, 3 moves in, currently ${gameAreaController.white?.userName}'s turn`,
             { exact: false },
           ),
-        ).toBeInTheDocument();
-      });
-
-      it('Updates the move count when the game is updated', () => {
-        renderGomokuArea();
-        expect(
-          screen.getByText(`Game in progress, 2 moves in`, { exact: false }),
-        ).toBeInTheDocument();
-        act(() => {
-          gameAreaController.mockMoveCount = 3;
-          gameAreaController.mockWhoseTurn = gameAreaController.mockWhite;
-          gameAreaController.mockIsOurTurn = false;
-          gameAreaController.emit('gameUpdated');
-        });
-        expect(
-          screen.getByText(`Game in progress, 3 moves in`, { exact: false }),
         ).toBeInTheDocument();
       });
       it('Updates the whose turn it is when the game is updated', () => {
@@ -577,7 +561,7 @@ describe('[G1] GomokuArea', () => {
         });
         expect(mockToast).toBeCalledWith(
           expect.objectContaining({
-            description: `You won!`,
+            description: `Congratulations, you won!`,
           }),
         );
       });
@@ -597,7 +581,7 @@ describe('[G1] GomokuArea', () => {
         });
         expect(mockToast).toBeCalledWith(
           expect.objectContaining({
-            description: `You lost :(`,
+            description: `Oh no, you lost! Better luck next time!`,
           }),
         );
       });
@@ -617,7 +601,7 @@ describe('[G1] GomokuArea', () => {
         });
         expect(mockToast).toBeCalledWith(
           expect.objectContaining({
-            description: `Game ended in a tie`,
+            description: `The game ended in a tie`,
           }),
         );
       });

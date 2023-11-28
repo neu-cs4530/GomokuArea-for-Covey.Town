@@ -40,15 +40,18 @@ function GomokuArea({ interactableID }: { interactableID: InteractableID }): JSX
   const [joiningGame, setJoiningGame] = useState(false);
   const [blackPlayer, setBlackPlayer] = useState(gameAreaController.black);
   const [whitePlayer, setWhitePlayer] = useState(gameAreaController.white);
+  const [moveCount, setMoveCount] = useState(gameAreaController.moveCount);
+  const [isOurTurn, setIsOurTurn] = useState(gameAreaController.isOurTurn);
 
   const updateGameState = () => {
     setGameStatus(gameAreaController.status || 'WAITING_TO_START');
     setBlackPlayer(gameAreaController.black);
     setWhitePlayer(gameAreaController.white);
+    setMoveCount(gameAreaController.moveCount);
+    setIsOurTurn(gameAreaController.isOurTurn);
   };
 
   useEffect(() => {
-    gameAreaController.addListener('gameUpdated', updateGameState);
 
     // Listen for game state updates
     gameAreaController.addListener('gameUpdated', updateGameState);
@@ -83,14 +86,14 @@ function GomokuArea({ interactableID }: { interactableID: InteractableID }): JSX
       gameAreaController.removeListener('gameUpdated', updateGameState);
       gameAreaController.removeListener('gameEnd', onGameEnd);
     };
-  }, [townController, gameAreaController, toast, updateGameState]);
+  }, [townController, toast, gameAreaController]);
 
   let gameStatusText = <></>;
   if (gameStatus === 'IN_PROGRESS') {
     const isOurTurn = gameAreaController.isOurTurn;
     gameStatusText = (
       <>
-        Game in progress, {gameAreaController.moveCount} moves in, currently{' '}
+        Game in progress, {moveCount} moves in, currently{' '}
         {isOurTurn ? 'your' : gameAreaController.whoseTurn?.userName + "'s"} turn
       </>
     );
