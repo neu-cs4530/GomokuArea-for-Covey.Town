@@ -174,6 +174,30 @@ describe('TicTacToeGame', () => {
           game.join(player2);
           expect(game.state.status).toEqual('IN_PROGRESS');
         });
+        it('should ensure the correct turn order is maintained after invalid moves', () => {
+          // Assume player1 (X) makes a valid move
+          game.applyMove({
+            gameID: game.id,
+            playerID: player1.id,
+            move: { row: 0, col: 0, gamePiece: 'X' },
+          });
+          // Player1 tries to play again
+          expect(() =>
+            game.applyMove({
+              gameID: game.id,
+              playerID: player1.id,
+              move: { row: 1, col: 1, gamePiece: 'X' },
+            }),
+          ).toThrowError(MOVE_NOT_YOUR_TURN_MESSAGE);
+          // Now it should be player2's (O) turn
+          expect(() =>
+            game.applyMove({
+              gameID: game.id,
+              playerID: player2.id,
+              move: { row: 1, col: 1, gamePiece: 'O' },
+            }),
+          ).not.toThrow();
+        });
         it('should rely on the player ID to determine whose turn it is', () => {
           expect(() =>
             game.applyMove({
