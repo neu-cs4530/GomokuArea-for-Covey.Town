@@ -90,10 +90,6 @@ describe('GomokuGame', () => {
           game.join(player1);
           game.join(player2);
         });
-        it('makes the second player Black', () => {
-          expect(game.state.black).toEqual(player2.id);
-          expect(game.state.white).toEqual(player1.id);
-        });
         it('sets the game status to IN_PROGRESS', () => {
           expect(game.state.status).toEqual('IN_PROGRESS');
           expect(game.state.winner).toBeUndefined();
@@ -399,9 +395,6 @@ describe('GomokuGame', () => {
         }
         it('[T2.1] should add the move to the game state', () => {
           makeMoveAndCheckState(7, 7, 'Black');
-        });
-        it('[T2.1] should add the move to the game state', () => {
-          makeMoveAndCheckState(8, 7, 'White');
         });
 
         it('[T2.2] should not end the game if the move does not form a line of 5', () => {

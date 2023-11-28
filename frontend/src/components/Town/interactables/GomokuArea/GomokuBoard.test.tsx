@@ -83,22 +83,6 @@ describe('GomokuBoard', () => {
 
     expect(mockToast).not.toHaveBeenCalled();
   });
-  it('updates the board displayed in response to boardChanged events', () => {
-    render(<GomokuBoard gameAreaController={mockGomokuAreaController} />);
-
-    const newMockBoard = Array.from({ length: 15 }, () => Array(15).fill(undefined));
-    newMockBoard[0][0] = 'Black';
-    newMockBoard[0][1] = 'White';
-    mockGomokuAreaController.mockBoard = newMockBoard;
-
-    act(() => {
-      mockGomokuAreaController.emit('boardChanged', newMockBoard);
-    });
-
-    const cells = screen.getAllByRole('button');
-    expect(cells[0]).toHaveTextContent('Black');
-    expect(cells[1]).toHaveTextContent('White');
-  });
   describe('When playing the game', () => {
     beforeEach(() => {
       mockGomokuAreaController.mockIsPlayer = true;
@@ -163,8 +147,8 @@ describe('GomokuBoard', () => {
       });
 
       const cells = screen.getAllByRole('button');
-      expect(cells[0]).toHaveTextContent('Black');
-      expect(cells[1]).toHaveTextContent('White');
+      expect(cells[0].firstChild).toHaveStyle(`border: 15px solid black`);
+      expect(cells[1].firstChild).toHaveStyle(`border: 15px solid white`);
     });
 
     it("disables cells when it is not the player's turn", () => {
