@@ -52,7 +52,6 @@ function GomokuArea({ interactableID }: { interactableID: InteractableID }): JSX
   };
 
   useEffect(() => {
-
     // Listen for game state updates
     gameAreaController.addListener('gameUpdated', updateGameState);
 
@@ -126,15 +125,10 @@ function GomokuArea({ interactableID }: { interactableID: InteractableID }): JSX
       );
     }
     gameStatusText = (
-      <Flex alignItems='center' justifyContent='space-between'>
-        <Box flexGrow={1}>
-          Game {gameStatus === 'WAITING_TO_START' ? 'not yet started' : 'over'}.
-        </Box>
+      <div>
+        <Box>Game {gameStatus === 'WAITING_TO_START' ? 'not yet started' : 'over'}.</Box>
         {joinGameButton}
-        {/* <Button onClick={toggleChat} size='sm' ml='4' bg='blue.500' color='white'>
-          {isChatOpen ? 'Close Chat' : 'Open Chat'}
-        </Button> */}
-      </Flex>
+      </div>
     );
   }
 
@@ -146,10 +140,12 @@ function GomokuArea({ interactableID }: { interactableID: InteractableID }): JSX
             <ListItem>Black: {blackPlayer?.userName || '(No player yet!)'}</ListItem>
             <ListItem>White: {whitePlayer?.userName || '(No player yet!)'}</ListItem>
           </List>
-          {gameStatusText}
-          <Button onClick={toggleChat} size='sm' ml='4' bg='blue.500' color='white'>
-          {isChatOpen ? 'Close Chat' : 'Open Chat'}
-        </Button>
+          <Flex alignItems='center' justifyContent='space-between'>
+            <Box flexGrow={1}>{gameStatusText}</Box>
+            <Button onClick={toggleChat} size='sm' ml='4' bg='blue.500' color='white'>
+              {isChatOpen ? 'Close Chat' : 'Open Chat'}
+            </Button>
+          </Flex>
           <Box mt='4'>
             <GomokuBoard gameAreaController={gameAreaController} />
           </Box>
