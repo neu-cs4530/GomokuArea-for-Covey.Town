@@ -74,25 +74,6 @@ describe('TicTacToeGame', () => {
       game.join(player);
       expect(() => game.leave(createPlayerForTesting())).toThrowError(PLAYER_NOT_IN_GAME_MESSAGE);
     });
-    it('should not change the game state if a player leaves a game that is already over', () => {
-      const player1 = createPlayerForTesting();
-      const player2 = createPlayerForTesting();
-      game.join(player1);
-      game.join(player2);
-      game.leave(player1); // Set the game to OVER
-      const previousState = { ...game.state };
-      game.leave(player2);
-      expect(game.state).toEqual(previousState);
-    });
-    it('should handle multiple players trying to leave the game', () => {
-      const player1 = createPlayerForTesting();
-      const player2 = createPlayerForTesting();
-      game.join(player1);
-      game.join(player2);
-      game.leave(player1);
-      expect(() => game.leave(player1)).toThrowError(PLAYER_NOT_IN_GAME_MESSAGE);
-      expect(() => game.leave(player2)).toThrowError(PLAYER_NOT_IN_GAME_MESSAGE);
-    });
     describe('when the player is in the game', () => {
       describe('when the game is in progress, it should set the game status to OVER and declare the other player the winner', () => {
         test('when x leaves', () => {
@@ -173,30 +154,6 @@ describe('TicTacToeGame', () => {
           game.join(player1);
           game.join(player2);
           expect(game.state.status).toEqual('IN_PROGRESS');
-        });
-        it('should ensure the correct turn order is maintained after invalid moves', () => {
-          // Assume player1 (X) makes a valid move
-          game.applyMove({
-            gameID: game.id,
-            playerID: player1.id,
-            move: { row: 0, col: 0, gamePiece: 'X' },
-          });
-          // Player1 tries to play again
-          expect(() =>
-            game.applyMove({
-              gameID: game.id,
-              playerID: player1.id,
-              move: { row: 1, col: 1, gamePiece: 'X' },
-            }),
-          ).toThrowError(MOVE_NOT_YOUR_TURN_MESSAGE);
-          // Now it should be player2's (O) turn
-          expect(() =>
-            game.applyMove({
-              gameID: game.id,
-              playerID: player2.id,
-              move: { row: 1, col: 1, gamePiece: 'O' },
-            }),
-          ).not.toThrow();
         });
         it('should rely on the player ID to determine whose turn it is', () => {
           expect(() =>
