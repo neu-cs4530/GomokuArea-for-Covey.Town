@@ -24,7 +24,6 @@ describe('GomokuGame', () => {
       game.join(player);
       expect(() => game.join(player)).toThrowError(PLAYER_ALREADY_IN_GAME_MESSAGE);
       const player2 = createPlayerForTesting();
-      // TODO weaker test suite doesn't add this
       game.join(player2);
       expect(() => game.join(player2)).toThrowError(PLAYER_ALREADY_IN_GAME_MESSAGE);
     });
@@ -36,6 +35,15 @@ describe('GomokuGame', () => {
       game.join(player2);
 
       expect(() => game.join(player3)).toThrowError(GAME_FULL_MESSAGE);
+    });
+    it('should throw an error if the game is full', () => {
+      const player1 = createPlayerForTesting();
+      const player2 = createPlayerForTesting();
+      const player3 = createPlayerForTesting();
+      game.join(player2);
+      game.join(player3);
+
+      expect(() => game.join(player1)).toThrowError(GAME_FULL_MESSAGE);
     });
     describe('When the player can be added', () => {
       it('makes the first player Black and initializes the state with status WAITING_TO_START', () => {
@@ -57,6 +65,34 @@ describe('GomokuGame', () => {
         it('makes the second player White', () => {
           expect(game.state.black).toEqual(player1.id);
           expect(game.state.white).toEqual(player2.id);
+        });
+        it('sets the game status to IN_PROGRESS', () => {
+          expect(game.state.status).toEqual('IN_PROGRESS');
+          expect(game.state.winner).toBeUndefined();
+          expect(game.state.moves).toHaveLength(0);
+        });
+      });
+    });
+    describe('When the player can be added', () => {
+      it('makes the first player Black and initializes the state with status WAITING_TO_START', () => {
+        const player = createPlayerForTesting();
+        game.join(player);
+        expect(game.state.black).toEqual(player.id);
+        expect(game.state.white).toBeUndefined();
+        expect(game.state.moves).toHaveLength(0);
+        expect(game.state.status).toEqual('WAITING_TO_START');
+        expect(game.state.winner).toBeUndefined();
+      });
+      describe('When the second player joins', () => {
+        const player1 = createPlayerForTesting();
+        const player2 = createPlayerForTesting();
+        beforeEach(() => {
+          game.join(player1);
+          game.join(player2);
+        });
+        it('makes the second player Black', () => {
+          expect(game.state.black).toEqual(player2.id);
+          expect(game.state.white).toEqual(player1.id);
         });
         it('sets the game status to IN_PROGRESS', () => {
           expect(game.state.status).toEqual('IN_PROGRESS');
@@ -364,6 +400,9 @@ describe('GomokuGame', () => {
         it('[T2.1] should add the move to the game state', () => {
           makeMoveAndCheckState(7, 7, 'Black');
         });
+        it('[T2.1] should add the move to the game state', () => {
+          makeMoveAndCheckState(8, 7, 'White');
+        });
 
         it('[T2.2] should not end the game if the move does not form a line of 5', () => {
           makeMoveAndCheckState(7, 7, 'Black');
@@ -479,148 +518,97 @@ describe('GomokuGame', () => {
               });
             });
             describe('if there are no winning conditions but the board is filled', () => {
-              it('Declear a tie', () => {
+              it('Declare a tie', () => {
+                // First, fill even rows with alternating black and white game pieces
                 for (let row = 0; row < 15; row += 2) {
                   for (let col = 0; col < 11; col += 4) {
                     game.applyMove({
                       gameID: game.id,
                       playerID: player1.id,
-                      move: {
-                        row,
-                        col,
-                        gamePiece: 'Black',
-                      },
+                      move: { row, col, gamePiece: 'Black' },
                     });
                     game.applyMove({
                       gameID: game.id,
                       playerID: player2.id,
-                      move: {
-                        row,
-                        col: col + 2,
-                        gamePiece: 'White',
-                      },
+                      move: { row, col: col + 2, gamePiece: 'White' },
                     });
                     game.applyMove({
                       gameID: game.id,
                       playerID: player1.id,
-                      move: {
-                        row,
-                        col: col + 1,
-                        gamePiece: 'Black',
-                      },
+                      move: { row, col: col + 1, gamePiece: 'Black' },
                     });
                     game.applyMove({
                       gameID: game.id,
                       playerID: player2.id,
-                      move: {
-                        row,
-                        col: col + 3,
-                        gamePiece: 'White',
-                      },
+                      move: { row, col: col + 3, gamePiece: 'White' },
                     });
                   }
                 }
 
+                // Then, fill odd rows with alternating black and white game pieces
                 for (let row = 1; row < 15; row += 2) {
                   for (let col = 0; col < 11; col += 4) {
                     game.applyMove({
                       gameID: game.id,
                       playerID: player1.id,
-                      move: {
-                        row,
-                        col: col + 2,
-                        gamePiece: 'Black',
-                      },
+                      move: { row, col: col + 2, gamePiece: 'Black' },
                     });
                     game.applyMove({
                       gameID: game.id,
                       playerID: player2.id,
-                      move: {
-                        row,
-                        col,
-                        gamePiece: 'White',
-                      },
+                      move: { row, col, gamePiece: 'White' },
                     });
                     game.applyMove({
                       gameID: game.id,
                       playerID: player1.id,
-                      move: {
-                        row,
-                        col: col + 3,
-                        gamePiece: 'Black',
-                      },
+                      move: { row, col: col + 3, gamePiece: 'Black' },
                     });
                     game.applyMove({
                       gameID: game.id,
                       playerID: player2.id,
-                      move: {
-                        row,
-                        col: col + 1,
-                        gamePiece: 'White',
-                      },
+                      move: { row, col: col + 1, gamePiece: 'White' },
                     });
                   }
                 }
+
+                // Finally, fill the remaining cells in all rows
                 for (let row = 0; row < 15; row++) {
                   if (row % 2 === 0) {
                     game.applyMove({
                       gameID: game.id,
                       playerID: player1.id,
-                      move: {
-                        row,
-                        col: 12,
-                        gamePiece: 'Black',
-                      },
+                      move: { row, col: 12, gamePiece: 'Black' },
                     });
                     game.applyMove({
                       gameID: game.id,
                       playerID: player2.id,
-                      move: {
-                        row,
-                        col: 13,
-                        gamePiece: 'White',
-                      },
+                      move: { row, col: 13, gamePiece: 'White' },
                     });
                     game.applyMove({
                       gameID: game.id,
                       playerID: player1.id,
-                      move: {
-                        row,
-                        col: 14,
-                        gamePiece: 'Black',
-                      },
+                      move: { row, col: 14, gamePiece: 'Black' },
                     });
                   } else {
                     game.applyMove({
                       gameID: game.id,
                       playerID: player2.id,
-                      move: {
-                        row,
-                        col: 12,
-                        gamePiece: 'White',
-                      },
+                      move: { row, col: 12, gamePiece: 'White' },
                     });
                     game.applyMove({
                       gameID: game.id,
                       playerID: player1.id,
-                      move: {
-                        row,
-                        col: 13,
-                        gamePiece: 'Black',
-                      },
+                      move: { row, col: 13, gamePiece: 'Black' },
                     });
                     game.applyMove({
                       gameID: game.id,
                       playerID: player2.id,
-                      move: {
-                        row,
-                        col: 14,
-                        gamePiece: 'White',
-                      },
+                      move: { row, col: 14, gamePiece: 'White' },
                     });
                   }
                 }
 
+                // Assert the game status is 'OVER' and there is no winner
                 expect(game.state.status).toEqual('OVER');
                 expect(game.state.winner).toBeUndefined();
               });
