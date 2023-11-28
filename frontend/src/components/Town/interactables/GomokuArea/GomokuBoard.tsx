@@ -39,15 +39,11 @@ const ChessPiece = ({ color }: { color: string }) => {
     display: 'inline-block',
     width: '100%',
     borderRadius: '100%',
-    border: `15px solid ${color}`
+    border: `15px solid ${color}`,
   };
 
   return <div style={style} />;
 };
-
-
-
-
 
 export default function GomokuBoard({ gameAreaController }: GomokuGameProps): JSX.Element {
   const [board, setBoard] = useState<GomokuCell[][]>(gameAreaController.board);
@@ -84,8 +80,12 @@ export default function GomokuBoard({ gameAreaController }: GomokuGameProps): JS
                 }
               }}
               disabled={!isOurTurn || cell !== undefined}
-        aria-label={`Cell ${rowIndex},${colIndex}`}>
-        {cell === 'Black' ? <ChessPiece color="black" /> : cell === 'White' ? <ChessPiece color="white" /> : null}
+              aria-label={`Cell ${rowIndex},${colIndex}`}>
+              {cell === 'Black' ? (
+                <ChessPiece color='black' />
+              ) : cell === 'White' ? (
+                <ChessPiece color='white' />
+              ) : null}
             </StyledGomokuSquare>
           );
         });

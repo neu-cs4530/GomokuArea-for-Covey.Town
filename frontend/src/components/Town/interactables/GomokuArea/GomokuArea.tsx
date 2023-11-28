@@ -41,7 +41,7 @@ function GomokuArea({ interactableID }: { interactableID: InteractableID }): JSX
   const [blackPlayer, setBlackPlayer] = useState(gameAreaController.black);
   const [whitePlayer, setWhitePlayer] = useState(gameAreaController.white);
   const [moveCount, setMoveCount] = useState(gameAreaController.moveCount);
-  const [isOurTurn, setIsOurTurn] = useState(gameAreaController.isOurTurn);
+  const [, setIsOurTurn] = useState(gameAreaController.isOurTurn);
 
   const updateGameState = () => {
     setGameStatus(gameAreaController.status || 'WAITING_TO_START');
