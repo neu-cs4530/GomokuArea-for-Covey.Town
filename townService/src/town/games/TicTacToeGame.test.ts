@@ -74,6 +74,25 @@ describe('TicTacToeGame', () => {
       game.join(player);
       expect(() => game.leave(createPlayerForTesting())).toThrowError(PLAYER_NOT_IN_GAME_MESSAGE);
     });
+    it('should not change the game state if a player leaves a game that is already over', () => {
+      const player1 = createPlayerForTesting();
+      const player2 = createPlayerForTesting();
+      game.join(player1);
+      game.join(player2);
+      game.leave(player1); // Set the game to OVER
+      const previousState = { ...game.state };
+      game.leave(player2);
+      expect(game.state).toEqual(previousState);
+    });
+    it('should handle multiple players trying to leave the game', () => {
+      const player1 = createPlayerForTesting();
+      const player2 = createPlayerForTesting();
+      game.join(player1);
+      game.join(player2);
+      game.leave(player1);
+      expect(() => game.leave(player1)).toThrowError(PLAYER_NOT_IN_GAME_MESSAGE);
+      expect(() => game.leave(player2)).toThrowError(PLAYER_NOT_IN_GAME_MESSAGE);
+    });
     describe('when the player is in the game', () => {
       describe('when the game is in progress, it should set the game status to OVER and declare the other player the winner', () => {
         test('when x leaves', () => {
