@@ -58,23 +58,20 @@ describe('ChatRoom', () => {
     });
   });
 
+  it('does not display a non-existing participant in the chat room', () => {
+    render(<ChatRoom conversation={mockConversation} />);
+    const nonExistingUserElement = screen.queryByText(nonExistingUser);
+    expect(nonExistingUserElement).not.toBeInTheDocument();
+  });
+
   it('shows the name of the current user for messages sent by them', () => {
     render(<ChatRoom conversation={mockConversation} />);
-
     const currentUserMessages = screen.getAllByText(currentUser);
     expect(currentUserMessages[0]).toBeInTheDocument();
   });
 
-  it('shows the name of other users for messages sent by them', () => {
-    render(<ChatRoom conversation={mockConversation} />);
-
-    const otherUserMessages = screen.getAllByText(otherUser);
-    expect(otherUserMessages[0]).toBeInTheDocument();
-  });
-
   it('shows content of the text sent by the current user', () => {
     render(<ChatRoom conversation={mockConversation} />);
-
     const currentUserMessageElement = screen.getByText((content, element) => {
       return (
         element !== null && element.tagName.toLowerCase() === 'div' && content.includes(userMessage)
@@ -83,9 +80,14 @@ describe('ChatRoom', () => {
     expect(currentUserMessageElement).toBeInTheDocument();
   });
 
+  it('shows the name of other users for messages sent by them', () => {
+    render(<ChatRoom conversation={mockConversation} />);
+    const otherUserMessages = screen.getAllByText(otherUser);
+    expect(otherUserMessages[0]).toBeInTheDocument();
+  });
+
   it('shows content of the text sent by other users', () => {
     render(<ChatRoom conversation={mockConversation} />);
-
     const otherUserMessageElement = screen.getByText((content, element) => {
       return (
         element !== null &&
@@ -124,12 +126,6 @@ describe('ChatRoom', () => {
     allUsers.forEach(user => {
       expect(screen.getByText(user)).toBeInTheDocument();
     });
-  });
-
-  it('does not display a non-existing participant in the chat room', () => {
-    render(<ChatRoom conversation={mockConversation} />);
-    const nonExistingUserElement = screen.queryByText(nonExistingUser);
-    expect(nonExistingUserElement).not.toBeInTheDocument();
   });
 
   it('does not display a non-existing message in the chat room', () => {
