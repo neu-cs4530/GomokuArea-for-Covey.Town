@@ -1,3 +1,10 @@
+#Project Poster
+![image](https://github.com/neu-cs4530/GomokuArea-for-Covey.Town/assets/92602862/2feaf8a0-089a-45bf-81d5-fbb162545a95)
+
+
+
+
+
 # Covey.Town
 
 Covey.Town provides a virtual meeting space where different groups of people can have simultaneous video calls, allowing participants to drift between different conversations, just like in real life.
