@@ -1,9 +1,8 @@
-#Project Poster
+# Project Poster
 ![image](https://github.com/neu-cs4530/GomokuArea-for-Covey.Town/assets/92602862/2feaf8a0-089a-45bf-81d5-fbb162545a95)
 
-
-
-
+# Demo
+https://team604-frontend.onrender.com/
 
 # Covey.Town
 
